@@ -352,6 +352,32 @@ describe('crowd interest management', () => {
     expect(detected.auras.some((a: any) => a.kind === 'stealth')).toBe(true);
   });
 
+  it('always sends stealthed party members unless they are dueling the viewer', () => {
+    const rogueFc = fakeWs();
+    const rogue = joinServer(server, rogueFc, 3, 'PartySneak', 'rogue');
+    server.sim.setPlayerLevel(10, viewer.pid);
+    server.sim.setPlayerLevel(10, rogue.pid);
+    server.sim.partyInvite(rogue.pid, viewer.pid);
+    server.sim.partyAccept(rogue.pid);
+    const v = server.sim.entities.get(viewer.pid)!;
+    placeAt(server, rogue.pid, v.pos.x + 30, v.pos.z);
+    server.sim.targetEntity(null, rogue.pid);
+    server.sim.castAbility('stealth', rogue.pid);
+
+    viewerFc.sent.length = 0;
+    broadcast(server);
+    let snap = lastSnap(viewerFc.sent);
+    expect(entRecord(snap, rogue.pid)).not.toBeNull();
+
+    server.sim.duelRequest(rogue.pid, viewer.pid);
+    server.sim.duelAccept(rogue.pid);
+    viewerFc.sent.length = 0;
+    step(server);
+    snap = lastSnap(viewerFc.sent);
+    expect(entRecord(snap, rogue.pid)).toBeNull();
+    expect(inKeep(snap, rogue.pid)).toBe(false);
+  });
+
   it('keeps stationary npcs visible out to the legacy 120yd radius', () => {
     const npc = [...server.sim.entities.values()].find((e) => e.kind === 'npc')!;
     // viewer 110yd from the npc, subject player at the same distance
