@@ -363,10 +363,10 @@ export async function findCharacterReportTargetByName(name: string): Promise<{ a
   return row ? { accountId: Number(row.account_id), characterId: Number(row.id), characterName: row.name } : null;
 }
 
-export async function createCharacter(accountId: number, name: string, cls: PlayerClass): Promise<CharacterRow> {
+export async function createCharacter(accountId: number, name: string, cls: PlayerClass, state: CharacterState | null = null): Promise<CharacterRow> {
   const res = await pool.query(
-    'INSERT INTO characters (account_id, name, class, realm) VALUES ($1, $2, $3, $4) RETURNING id, account_id, name, class, level, state, is_gm, force_rename',
-    [accountId, name, cls, REALM],
+    'INSERT INTO characters (account_id, name, class, realm, state) VALUES ($1, $2, $3, $4, $5) RETURNING id, account_id, name, class, level, state, is_gm, force_rename',
+    [accountId, name, cls, REALM, state ? JSON.stringify(state) : null],
   );
   return res.rows[0];
 }

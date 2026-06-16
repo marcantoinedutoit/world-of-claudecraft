@@ -9,7 +9,6 @@ export const MEDIA_ASSETS: Record<string, string> =
   "env/peaks_dawn_2k.hdr": "/media/env/peaks_dawn_2k.7261c613b35a.hdr",
   "env/vale_day_1k.hdr": "/media/env/vale_day_1k.fd94c84997b8.hdr",
   "env/vale_day_2k.hdr": "/media/env/vale_day_2k.5244534e9cf5.hdr",
-  "models/chars/.DS_Store": "/media/models/chars/.DS_Store.a8dc76eb0517",
   "models/chars/enemies/skeleton_mage.glb": "/media/models/chars/enemies/skeleton_mage.6ba188f0d81a.glb",
   "models/chars/enemies/skeleton_minion.glb": "/media/models/chars/enemies/skeleton_minion.8adc2d39c581.glb",
   "models/chars/enemies/skeleton_rogue.glb": "/media/models/chars/enemies/skeleton_rogue.b248fdca66c6.glb",
